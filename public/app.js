@@ -46,7 +46,7 @@ function buttonLoading(btn,on,label='Đang xử lý...'){if(btn){btn.disabled=on
 function appError(err){const e=root.querySelector('.form-error');if(e){e.textContent=err.message||String(err)}else toast(err.message||String(err));}
 function demoBanner(){return isDemo?`<div class="demo-banner"><strong>BẢN THỬ TRÊN THIẾT BỊ NÀY.</strong> Dùng MK1 <b>${MK1_DEMO}</b>. Lời nhắn chỉ lưu trong trình duyệt hiện tại, không chia sẻ giữa các thiết bị. <button id="reset-demo" class="text-btn" type="button">Đặt lại</button></div>`:''}
 function attachDemoReset(){if(isDemo)$('#reset-demo')?.addEventListener('click',()=>{if(confirm('Xóa dữ liệu demo trên thiết bị này?')){demoStore.removeItem('cn-demo-v2');location.reload()}})}
-function home(){setHeader('Một lời nhắn <em>đang chờ</em>','Hãy trải nghiệm gửi lời nhắn, ảnh và nhạc. Mỗi thỏi son thật sẽ có một QR riêng.');put(`<div class="app-badge">EXPERIENCE CACAO NOTE</div><h3>Bạn có một điều<br/><em>muốn nói?</em></h3><p>Trải nghiệm tạo món quà riêng tư với ba bước: mở mã, viết lời nhắn, khóa bằng mật khẩu tự chọn.</p><a class="primary-btn" href="/demo">Dùng thử ngay <span>↗</span></a><p class="util-hint">Bản thử chỉ lưu trên thiết bị này và có thể đặt lại.</p>`)}
+function home(){setHeader('Một lời nhắn <em>đang chờ</em>','Hãy trải nghiệm gửi lời nhắn, ảnh và nhạc. Mỗi thỏi son thật sẽ có một QR riêng.');put(`<div class="app-badge">EXPERIENCE CACAO NOTE</div><h3>Bạn có một điều<br/><em>muốn nói?</em></h3><p>Trải nghiệm tạo món quà riêng tư với ba bước: mở mã, viết lời nhắn, khóa bằng mật khẩu tự chọn.</p><a class="primary-btn" href="/demo#gift-app">Dùng thử ngay <span>↗</span></a><p class="util-hint">Bản thử chỉ lưu trên thiết bị này và có thể đặt lại.</p>`)}
 function startScreen(status){
  setHeader('Mở một <em>điều bí mật</em>','Mã QR trên mỗi thỏi son dẫn tới không gian riêng của món quà đó.');
  let locked=status==='locked',draft=status==='draft';
@@ -158,7 +158,7 @@ function renderLetter(item){
 }
 async function gift(){
  put('<div class="loading-line">Đang kiểm tra không gian quà tặng...</div>');
- try{const state=await request(giftApi(''));startScreen(state.status)}catch(e){put(`<div class="app-badge">GIFT NOT FOUND</div><h3>Chưa tìm thấy <em>món quà.</em></h3><p>${escapeHtml(e.message)}. Kiểm tra lại mã QR hoặc liên hệ người tặng.</p><a class="primary-btn" href="/demo">Thử bản demo <span>↗</span></a>`)}
+ try{const state=await request(giftApi(''));startScreen(state.status)}catch(e){put(`<div class="app-badge">GIFT NOT FOUND</div><h3>Chưa tìm thấy <em>món quà.</em></h3><p>${escapeHtml(e.message)}. Kiểm tra lại mã QR hoặc liên hệ người tặng.</p><a class="primary-btn" href="/demo#gift-app">Thử bản demo <span>↗</span></a>`)}
 }
 function privacy(){setHeader('Quyền riêng tư <em>là quan trọng</em>','Một món quà có ý nghĩa cần được bảo vệ ngay từ lúc tạo ra.');put(`<div class="app-badge">OUR PRIVACY PROMISE</div><h3>Giữ kín những <em>điều riêng tư.</em></h3><div class="privacy-text"><h4>Những gì được lưu</h4><p>Dữ liệu mã hóa của lời nhắn, ảnh, âm thanh và thông tin cần thiết để vận hành mã QR. Website không yêu cầu email, số điện thoại hay địa chỉ của người gửi và người nhận.</p><h4>Hai mật khẩu hoạt động ra sao?</h4><p>MK1 được in trên son và kiểm tra tại máy chủ. MK2 do người mua tự tạo, dùng để mã hóa nội dung trên thiết bị, không gửi lên máy chủ. Vì MK1 được in trên vỏ, tính riêng tư chủ yếu phụ thuộc MK2.</p><h4>Những giới hạn cần biết</h4><p>Người vận hành dịch vụ có thể ngừng website, xóa dữ liệu hoặc sửa mã website. Đây là dự án thử nghiệm chưa được kiểm toán bảo mật và không có cam kết lưu trữ vĩnh viễn. Đừng gửi dữ liệu cực kỳ nhạy cảm. Nếu quên MK2, không thể mở nội dung cũ.</p><h4>Việc xóa dữ liệu</h4><p>Phiên bản hiện tại chưa hỗ trợ người dùng tự xóa lời nhắn đã khóa. Trước khi sử dụng với khách hàng thật, cần có chính sách giữ và xóa dữ liệu, phương thức liên hệ và cơ chế sao lưu phù hợp.</p></div>`)}
 function admin(){
@@ -181,4 +181,14 @@ function adminResults(products){
  if(location.pathname==='/admin'){admin();return}
  if(productId){await gift();return}
  home();
+})();
+
+// UX fix: each route shares the same page shell. Show the active gift panel
+// instead of restarting at the landing-page hero on every navigation.
+(function focusCurrentRoute(){
+  if (!(/^\/s\/[\w-]{16,35}$/.test(location.pathname) || ['/admin','/demo'].includes(location.pathname))) return;
+  const jump = () => requestAnimationFrame(() =>
+    requestAnimationFrame(() => document.getElementById('gift-app')?.scrollIntoView({behavior:'auto',block:'start'})));
+  if (document.readyState === 'complete') jump();
+  else window.addEventListener('load', jump, {once:true});
 })();
