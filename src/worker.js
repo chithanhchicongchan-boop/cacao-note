@@ -128,7 +128,7 @@ export default {
       if(req.method!=='GET'&&req.method!=='HEAD')return bad('Không được phép.',405);
       let response;
       if(/^\/s\/[\w-]+$/.test(url.pathname)||url.pathname==='/admin'||url.pathname==='/demo'||url.pathname==='/privacy'){
-        const asset=new URL('/index.html',url.origin);
+        const asset=new URL('/',url.origin);
         response=await env.ASSETS.fetch(new Request(asset.toString(),req));
       }else response=await env.ASSETS.fetch(req);
       const h=new Headers(response.headers);
