@@ -1,0 +1,41 @@
+// Local end-to-end Worker API test using Node's built-in SQLite + Web Crypto.
+import { DatabaseSync } from 'node:sqlite';
+import { readFileSync } from 'node:fs';
+import { webcrypto } from 'node:crypto';
+import assert from 'node:assert/strict';
+import worker from '../src/worker.js';
+const sqlite=new DatabaseSync(':memory:');
+sqlite.exec(readFileSync(new URL('../schema.sql',import.meta.url),'utf-8'));
+const d1={prepare(sql){return {bind(...params){return {async first(){return sqlite.prepare(sql).get(...params)||null},async all(){return {results:sqlite.prepare(sql).all(...params)}},async run(){const result=sqlite.prepare(sql).run(...params);return {meta:{changes:result.changes}}}}}}}};
+const env={DB:d1,ADMIN_TOKEN:'ADMIN_KEY_SOME_LONG_RANDOM_EXAMPLE_123456',ASSETS:{fetch:()=>new Response('html')}};
+const origin='https://cacao-note.workers.dev';
+async function api(path,method='GET',payload,headers={}){
+ const res=await worker.fetch(new Request(origin+path,{method,headers:{...(payload?{'content-type':'application/json'}:{}),...headers},body:payload?JSON.stringify(payload):undefined}),env);
+ const data=await res.json();return {status:res.status,...data};
+}
+const created=await api('/api/admin/create','POST',{count:2},{'x-admin-key':env.ADMIN_TOKEN});
+assert.equal(created.status,200);assert.equal(created.products.length,2);
+const {id,mk1}=created.products[0];
+assert.equal((await api(`/api/products/${id}`)).status,'new');
+assert.equal((await api(`/api/products/${id}/start`,'POST',{mk1:'WRONG'})).status,401);
+const started=await api(`/api/products/${id}/start`,'POST',{mk1});
+assert.equal(started.status,200);assert.equal((await api(`/api/products/${id}`)).status,'draft');
+const pass='LongMK2_WillRemainOnlyOnMyDevice-2026';
+const salt=webcrypto.getRandomValues(new Uint8Array(16)),iv=webcrypto.getRandomValues(new Uint8Array(12));
+const imported=await webcrypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+const key=await webcrypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:400000,hash:'SHA-256'},imported,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+const message={recipient:'An',sender:'Cacao',message:'Chúc một ngày tốt lành',images:[],audio:null};
+const enc=Buffer.from(await webcrypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(message)))).toString('base64');
+assert.equal((await api(`/api/products/${id}/upload`,'POST',{uploadToken:started.uploadToken,index:0,data:enc})).status,200);
+const finalized=await api(`/api/products/${id}/finalize`,'POST',{uploadToken:started.uploadToken,count:1,salt:Buffer.from(salt).toString('base64'),iv:Buffer.from(iv).toString('base64')});
+assert.equal(finalized.status,'locked');assert.equal((await api(`/api/products/${id}`)).status,'locked');
+assert.equal((await api(`/api/products/${id}/start`,'POST',{mk1})).status,409);
+const access=await api(`/api/products/${id}/access`,'POST',{mk1});
+assert.equal(access.status,200);
+assert.equal(access.mk1,undefined);assert.equal(access.mk2,undefined);
+const got=await api(`/api/products/${id}/chunks?from=0&count=1`,'GET',null,{authorization:'Bearer '+access.accessToken});
+assert.equal(got.status,200);assert.equal(got.chunks[0],enc);
+const decrypted=await webcrypto.subtle.decrypt({name:'AES-GCM',iv:Buffer.from(access.iv,'base64')},key,Buffer.from(got.chunks.join(''),'base64'));
+assert.deepEqual(JSON.parse(new TextDecoder().decode(decrypted)),message);
+assert.equal((await api(`/api/products/${id}/chunks?from=0&count=1`)).status,403);
+console.log('PASS: create -> MK1 -> encrypt -> upload -> lock -> MK1+MK2 -> open; unauthorized and overwrite prevented');
