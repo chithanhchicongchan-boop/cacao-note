@@ -16,7 +16,7 @@ const random = (len=24) => b64url(crypto.getRandomValues(new Uint8Array(len)));
 const digest = async value => [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)))].map(x=>x.toString(16).padStart(2,'0')).join('');
 const constantMatch=(a,b)=>{if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let v=0;for(let i=0;i<a.length;i++)v|=a.charCodeAt(i)^b.charCodeAt(i);return v===0};
 const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-const newMK1=()=>{const r=crypto.getRandomValues(new Uint8Array(12));return [...r].map(v=>alphabet[v%32]).join('').match(/.{1,4}/g).join('-')};
+const newMK1=(length=6)=>{const r=crypto.getRandomValues(new Uint8Array(length));return [...r].map(v=>alphabet[v%alphabet.length]).join('')};
 const norm=m=>String(m||'').replace(/-/g,'').toUpperCase();
 const body = async req=>{const len=Number(req.headers.get('content-length')||0);if(len>180000)return null;try {return await req.json()}catch{return null}};
 const validId=id=>/^[\w-]{16,35}$/.test(id);
@@ -48,10 +48,12 @@ async function route(req,env,url){
  if(path==='/api/admin/create'&&method==='POST'){
    if(!await isAdmin(req,env))return bad('Không có quyền quản trị.',403);
    const data=await body(req);const count=Number(data?.count);
+   const mk1Length=data?.mk1Length===undefined?6:Number(data.mk1Length);
    if(!Number.isInteger(count)||count<1||count>40)return bad('Chọn từ 1 đến 40 sản phẩm.');
+   if(!Number.isInteger(mk1Length)||mk1Length<4||mk1Length>12)return bad('Độ dài MK1 phải từ 4 đến 12 ký tự.');
    const out=[];
    for(let i=0;i<count;i++){
-     const id=random(16),mk1=newMK1(),salt=random(12),hash=await digest(salt+':'+norm(mk1));
+     const id=random(16),mk1=newMK1(mk1Length),salt=random(12),hash=await digest(salt+':'+norm(mk1));
      await env.DB.prepare('INSERT INTO gifts (id,mk1_salt,mk1_hash,created_at) VALUES (?,?,?,?)').bind(id,salt,hash,now()).run();
      out.push({id,mk1,url:`${url.origin}/s/${id}`});
    }
