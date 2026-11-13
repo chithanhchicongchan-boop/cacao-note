@@ -44,7 +44,7 @@
   const zoneMap = new Map();
   const rng = (a,b) => a + Math.random() * (b-a);
   const choose = arr => arr[Math.floor(Math.random()*arr.length)];
-  const petSize = () => innerWidth <= 650 ? 48 : 62;
+  const petSize = () => innerWidth <= 650 ? 52 : 64;
   const prefersQuiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let muted = true, hidden = false, audioCtx = null, globalBusy = false;
   let geometryTimer = 0;
@@ -150,7 +150,7 @@
   const pets = information.map((info,i)=>{
     const el=document.createElement('button');el.type='button';el.className='cn-pet';
     el.setAttribute('aria-label','Chơi với '+info.name);el.title='Chơi với '+info.name;
-    el.innerHTML=`<span class="cn-pet-art"><img class="cn-pet-img" src="${src(info.id,info.pose)}" alt="" draggable="false"/><span class="cn-pet-rig">${rigMarkup(info.id)}</span><span class="cn-pet-zz">z z</span></span><span class="cn-pet-speech" aria-hidden="true"></span>`;
+    el.innerHTML=`<span class="cn-pet-art"><img class="cn-pet-img" src="${src(info.id,info.pose)}" alt="" draggable="false"/><span class="cn-pet-zz">z z</span></span><span class="cn-pet-speech" aria-hidden="true"></span>`;
     world.append(el);
     const p={...info,el,img:el.querySelector('img'),bubble:el.querySelector('.cn-pet-speech'),zone:homeKeys[i],node:null,x:0,y:0,moving:false,busy:false,visible:false,lastSay:0,task:0,poseTimeout:0,talkTimeout:0,lastMove:0,visited:[],recentActs:[],recentRoutes:[],recentGaits:[],tickTimer:0,runFrames:0,lastGait:'',scenes:0};
     el.style.setProperty('--facing',i%2?'1':'-1');
@@ -342,8 +342,13 @@
     }
   }
   function animateStride(p,gait){
-    // Four independently articulated feet follow continuous CSS cycles.
-    // No replacement of face/pose images while walking.
+    // A single illustration style for both movement and rest. Never switch to
+    // the separate vector rig: that rig had different faces and proportions.
+    // Choose ONE fitting source illustration at the beginning of a journey,
+    // then keep it unchanged while the feet/body animation runs in CSS.
+    const movingFrame = ({white:0,black:1,panda:0,duck:3})[p.id] ?? 0;
+    const original=src(p.id,movingFrame);
+    if(original&&p.img.getAttribute('src')!==original)p.img.src=original;
     p.activeGait=gait;
     p.el.dataset.gait=gait;
   }
@@ -537,7 +542,7 @@
       const zone=zoneMap.get(p.zone);if(!zone||!Object.keys(zone.nodes).length)return;
       // Initialize into a safe corner; preserve occupants across resize and content changes.
       if(initial||!p.visible){
-        const preferred=['TL','TR','BR','BL'][i];
+        const preferred=['ML','TR','BR','BL'][i];
         p.node=zone.nodes[preferred]?preferred:Object.keys(zone.nodes)[0];
         place(p,zone.nodes[p.node],true);idle(p);
       } else if(!p.busy){
@@ -649,7 +654,7 @@
   requestAnimationFrame(()=>{
     setGeometry(true);
     if(!prefersQuiet){
-      pets.forEach((p,i)=>schedulePet(p,900+i*650+rng(0,900)));
+      pets.forEach((p,i)=>schedulePet(p,11500+i*600));
       setInterval(migrate,26000);
       setInterval(friendScene,28000);
     }

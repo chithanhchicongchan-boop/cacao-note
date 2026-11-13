@@ -288,3 +288,41 @@ main{position:relative;isolation:isolate}
 .cn-pet[data-perch="hang"][data-perch-side="left"]::before{right:-11px;top:25px;transform:rotate(-20deg)}
 .cn-pet[data-perch="hang"][data-perch-side="top"]::before{bottom:-9px;left:45%;transform:rotate(70deg)}
 .cn-pet[data-perch="hang"][data-perch-side="bottom"]::before{top:-9px;left:45%;transform:rotate(-45deg)}
+
+/* V5 illustration-fidelity fix. Keep the same original character art all the time. */
+.cn-pet-rig{display:none!important}
+.cn-pet-img,
+.cn-pet[data-motion="move"] .cn-pet-img,
+.cn-pet[data-motion="hang"] .cn-pet-img{opacity:1!important;visibility:visible!important}
+.cn-pet{width:64px;height:64px;filter:drop-shadow(0 2px 2px rgba(62,44,33,.10))}
+.cn-pet-art{transform-origin:center 84%}
+/* Running and walking use restrained physical shifts instead of replacing art. */
+.cn-pet[data-motion="move"] .cn-pet-art{animation:cn-art-step .43s cubic-bezier(.37,.1,.6,.93) infinite alternate!important}
+.cn-pet[data-motion="move"][data-gait="dash"] .cn-pet-art,
+.cn-pet[data-motion="move"][data-gait="trot"] .cn-pet-art{animation:cn-art-sprint .27s ease-in-out infinite alternate!important}
+.cn-pet[data-motion="move"][data-gait="sneak"] .cn-pet-art,
+.cn-pet[data-motion="move"][data-gait="tiptoe"] .cn-pet-art{animation:cn-art-creep .65s ease-in-out infinite alternate!important}
+.cn-pet[data-motion="move"][data-travel="up"] .cn-pet-art,
+.cn-pet[data-motion="move"][data-travel="down"] .cn-pet-art{animation:cn-art-vertical .45s ease-in-out infinite alternate!important}
+@keyframes cn-art-step{
+  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-1.4deg) scaleY(.985)}
+  to{transform:scaleX(var(--facing,1)) translateY(-3px) rotate(1.4deg) scaleY(1.012)}
+}
+@keyframes cn-art-sprint{
+  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-2.2deg) scale(1.012,.98)}
+  to{transform:scaleX(var(--facing,1)) translateY(-5px) rotate(2.2deg) scale(.988,1.022)}
+}
+@keyframes cn-art-creep{
+  from{transform:scaleX(var(--facing,1)) translateY(0px) rotate(-.7deg)}
+  to{transform:scaleX(var(--facing,1)) translateY(-1.5px) rotate(.7deg)}
+}
+@keyframes cn-art-vertical{
+  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-1deg)}
+  to{transform:scaleX(var(--facing,1)) translateY(-2.5px) rotate(1deg)}
+}
+/* Paths still work for movement and collision, but do not look like debug guides. */
+.cn-trail-lines{opacity:.105!important;stroke-dasharray:2 16!important;stroke-width:1!important}
+.cn-trail-nodes{opacity:.08!important}
+.cn-environment .cn-trail:after{opacity:.16!important}
+@media(max-width:650px){.cn-pet{width:52px;height:52px}}
+@media(prefers-reduced-motion:reduce){.cn-pet[data-motion="move"] .cn-pet-art{animation:none!important}}
