@@ -108,7 +108,6 @@ main{position:relative;isolation:isolate}
 @media(prefers-reduced-motion:reduce){.cn-pet,.cn-pet-art{animation:none!important;transition:none!important}}
 @media print{.cn-world,.cn-trail,.cn-pet-settings{display:none!important}}
 
-
 /* Each animal has a small repertoire of body mechanics. All movement lives on the page, not viewport. */
 .cn-pet[data-motion="move"] .cn-pet-art{animation:cn-gait-walk .42s ease-in-out infinite alternate}
 .cn-pet[data-motion="move"][data-gait="trot"] .cn-pet-art{animation:cn-gait-trot .25s ease-in-out infinite alternate}
@@ -186,33 +185,6 @@ main{position:relative;isolation:isolate}
 @keyframes cn-sleepy{0%,100%{transform:scaleX(var(--facing,1)) translateY(6px) rotate(-7deg) scale(1.1,.84)}50%{transform:scaleX(var(--facing,1)) translateY(5px) rotate(-7deg) scale(1.12,.9)}}
 @media(prefers-reduced-motion:reduce){.cn-particle{animation:none!important;display:none!important}}
 
-/* V4: softer physicality: no sharp head spins or rapid gait changes. */
-.cn-pet[data-motion="move"] .cn-pet-art{transform-origin:50% 88%}
-.cn-pet[data-motion="move"][data-gait="walk"] .cn-pet-art{animation:cn-v4-walk .50s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"][data-gait="trot"] .cn-pet-art{animation:cn-v4-trot .37s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"][data-gait="dash"] .cn-pet-art{animation:cn-v4-dash .27s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"][data-gait="skip"] .cn-pet-art{animation:cn-v4-skip .56s ease-in-out infinite}
-.cn-pet[data-motion="move"][data-travel="up"] .cn-pet-art,
-.cn-pet[data-motion="move"][data-travel="down"] .cn-pet-art{animation:cn-v4-vertical .48s ease-in-out infinite alternate}
-.cn-pet[data-motion="bum"] .cn-pet-art{animation:cn-v4-bum 1.4s ease-in-out both}
-.cn-pet[data-motion="groom"] .cn-pet-art{animation:cn-v4-groom 1.25s ease-in-out infinite alternate}
-.cn-pet[data-motion="shake"] .cn-pet-art{animation:cn-v4-shake 1.05s ease-in-out both}
-.cn-pet[data-motion="sleep"] .cn-pet-art{animation:cn-v4-nap 3.8s ease-in-out infinite}
-.cn-pet[data-motion="flap"] .cn-pet-art{animation:cn-v4-flap .40s ease-in-out infinite alternate}
-.cn-pet[data-motion="roll"] .cn-pet-art{animation:cn-v4-roll 1.17s ease-in-out both}
-@keyframes cn-v4-walk{0%{transform:scaleX(var(--facing,1)) translateY(0) rotate(-1deg)}100%{transform:scaleX(var(--facing,1)) translateY(-2px) rotate(1deg)}}
-@keyframes cn-v4-trot{0%{transform:scaleX(var(--facing,1)) translateY(0px) rotate(-2deg)}100%{transform:scaleX(var(--facing,1)) translateY(-4px) rotate(2deg)}}
-@keyframes cn-v4-dash{0%{transform:scaleX(var(--facing,1)) translateY(-3px) rotate(-3deg) scale(1.035,.985)}100%{transform:scaleX(var(--facing,1)) translateY(0) rotate(3deg) scale(.995,1.005)}}
-@keyframes cn-v4-skip{0%,100%{transform:scaleX(var(--facing,1)) translateY(0)}40%{transform:scaleX(var(--facing,1)) translateY(-6px)}}
-@keyframes cn-v4-vertical{0%{transform:scaleX(var(--facing,1)) translateY(0)}100%{transform:scaleX(var(--facing,1)) translateY(-3px)}}
-@keyframes cn-v4-groom{0%,100%{transform:scaleX(var(--facing,1)) rotate(-1.5deg)}50%{transform:scaleX(var(--facing,1)) rotate(2deg) translateY(1px)}}
-@keyframes cn-v4-shake{0%,100%{transform:scaleX(var(--facing,1)) rotate(0)}25%{transform:scaleX(var(--facing,1)) rotate(-5deg)}50%{transform:scaleX(var(--facing,1)) rotate(5deg)}75%{transform:scaleX(var(--facing,1)) rotate(-3deg)}}
-@keyframes cn-v4-nap{0%,100%{transform:scaleX(var(--facing,1)) scale(1,.985)}50%{transform:scaleX(var(--facing,1)) scale(1.015,1)}}
-@keyframes cn-v4-flap{0%{transform:scaleX(var(--facing,1)) rotate(-2deg)}100%{transform:scaleX(var(--facing,1)) rotate(3deg) translateY(-3px)}}
-@keyframes cn-v4-bum{0%,100%{transform:scaleX(var(--facing,1)) rotate(0) scale(1)}25%{transform:scaleX(var(--facing,1)) rotate(-5deg) scale(1.02,.97)}50%{transform:scaleX(var(--facing,1)) rotate(5deg) scale(1.02,.97)}75%{transform:scaleX(var(--facing,1)) rotate(-3deg)}}
-@keyframes cn-v4-roll{0%{transform:scaleX(var(--facing,1)) rotate(0)}40%{transform:scaleX(var(--facing,1)) rotate(-15deg) translateY(-3px)}78%{transform:scaleX(var(--facing,1)) rotate(7deg)}100%{transform:scaleX(var(--facing,1)) rotate(0)}}
-@media(prefers-reduced-motion:reduce){.cn-pet .cn-pet-art{animation:none!important}}
-
 /* The speech label belongs inside the section even near the top navigation. */
 .cn-pet[data-bubble="below"] .cn-pet-speech{bottom:auto;top:96%;}
 .cn-pet[data-bubble="below"] .cn-pet-speech:after{top:-5px;bottom:auto;transform:translateX(-50%) rotate(225deg)}
@@ -233,45 +205,6 @@ main{position:relative;isolation:isolate}
 .cn-habitat .cn-moss-a{left:12px;bottom:12%}
 .cn-habitat .cn-moss-b{right:10px;top:16%}
 @keyframes cn-leaf-sway{0%,100%{transform:rotate(-1deg)}55%{transform:rotate(3deg)}}
-.cn-pet-rig{position:absolute;inset:0;opacity:0;transform:scale(1.01);pointer-events:none;transition:opacity .23s ease}
-.cn-pet-rig svg{display:block;width:100%;height:100%;overflow:visible}
-.cn-pet-img{transition:opacity .20s ease}
-.cn-pet[data-motion="move"] .cn-pet-rig,
-.cn-pet[data-motion="hang"] .cn-pet-rig{opacity:1}
-.cn-pet[data-motion="move"] .cn-pet-img,
-.cn-pet[data-motion="hang"] .cn-pet-img{opacity:0}
-.cn-pet[data-motion="move"] .cn-pet-art{animation:cn-rig-ride .49s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"][data-gait="dash"] .cn-pet-art,
-.cn-pet[data-motion="move"][data-gait="trot"] .cn-pet-art{animation-duration:.3s}
-.cn-pet[data-motion="move"] .cn-limb{transform-box:view-box;transform-origin:var(--pivot);animation:cn-paw-walk .44s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"] .cn-leg-b,
-.cn-pet[data-motion="move"] .cn-leg-d{animation-direction:alternate-reverse}
-.cn-pet[data-motion="move"][data-gait="trot"] .cn-limb{animation-duration:.29s}
-.cn-pet[data-motion="move"][data-gait="dash"] .cn-limb{animation-duration:.21s;animation-name:cn-paw-dash}
-.cn-pet[data-motion="move"][data-gait="skip"] .cn-limb{animation-duration:.38s}
-.cn-pet .cn-tail{transform-box:view-box;transform-origin:25px 65px;animation:cn-tail-easy 2.7s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"] .cn-tail{animation-duration:.68s}
-.cn-pet[data-motion="move"] .cn-rig-head{transform-box:fill-box;transform-origin:50% 72%;animation:cn-head-alive 2.6s ease-in-out infinite alternate}
-.cn-pet[data-motion="move"] .cn-rig-eye{transform-box:fill-box;transform-origin:center;animation:cn-eye-blink 5.8s linear infinite}
-.cn-pet[data-motion="hang"] .cn-pet-art{animation:cn-little-hang 2.8s ease-in-out infinite alternate;transform-origin:50% 15%}
-.cn-pet[data-motion="hang"] .cn-limb{transform-box:view-box;transform-origin:var(--pivot);animation:cn-paw-dangle 2s ease-in-out infinite alternate}
-.cn-pet[data-motion="hang"] .cn-leg-b,
-.cn-pet[data-motion="hang"] .cn-leg-d{animation-direction:alternate-reverse}
-.cn-pet[data-perch="rest"]{filter:drop-shadow(0 3px 2px #6e534522)}
-@keyframes cn-paw-walk{0%{transform:rotate(-17deg) translateY(-1px)}100%{transform:rotate(18deg) translateY(1px)}}
-@keyframes cn-paw-dash{0%{transform:rotate(-27deg) translateY(-4px)}100%{transform:rotate(28deg) translateY(1px)}}
-@keyframes cn-paw-dangle{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(17deg)}}
-@keyframes cn-tail-easy{0%{transform:rotate(-9deg)}100%{transform:rotate(10deg)}}
-@keyframes cn-rig-ride{0%{transform:scaleX(var(--facing,1)) translateY(0) rotate(-1deg)}100%{transform:scaleX(var(--facing,1)) translateY(-2px) rotate(1deg)}}
-@keyframes cn-head-alive{0%,100%{transform:rotate(-1deg)}70%{transform:rotate(2deg)}}
-@keyframes cn-eye-blink{0%,39%,42%,100%{transform:scaleY(1)}40%,41%{transform:scaleY(.08)}}
-@keyframes cn-little-hang{0%,100%{transform:scaleX(var(--facing,1)) rotate(-5deg) translateY(1px)}50%{transform:scaleX(var(--facing,1)) rotate(6deg) translateY(3px)}}
-@media(max-width:750px){
- .cn-habitat .cn-twig-a{left:10px;width:34px;height:76px}
- .cn-habitat .cn-twig-b{right:7px;width:40px;height:48px}
- .cn-habitat .cn-moss{opacity:.32}
-}
-@media(prefers-reduced-motion:reduce){.cn-pet-rig *, .cn-habitat *{animation:none!important}}
 
 /* Tiny editorial navigation sits naturally with the existing copy. */
 .cn-page-link{display:inline-flex;align-items:center;gap:11px;max-width:max-content;margin-top:15px;padding:7px 0;border-bottom:1px solid rgba(118,105,86,.38);color:#756652;font:500 11px/1.5 ui-sans-serif,system-ui,sans-serif;letter-spacing:.015em;text-decoration:none}
@@ -282,47 +215,125 @@ main{position:relative;isolation:isolate}
 
 .cn-app-link{margin-left:0;margin-top:12px}
 
-/* Subtle leaf-colored hook that connects a hanging animal to the button ledge. */
-.cn-pet[data-perch="hang"]::before{content:"";position:absolute;z-index:-1;pointer-events:none;width:14px;height:12px;border:1.5px solid rgba(137,147,121,.6);border-radius:10px 3px 8px 2px;transform:rotate(17deg)}
-.cn-pet[data-perch="hang"][data-perch-side="right"]::before{left:-11px;top:25px}
-.cn-pet[data-perch="hang"][data-perch-side="left"]::before{right:-11px;top:25px;transform:rotate(-20deg)}
-.cn-pet[data-perch="hang"][data-perch-side="top"]::before{bottom:-9px;left:45%;transform:rotate(70deg)}
-.cn-pet[data-perch="hang"][data-perch-side="bottom"]::before{top:-9px;left:45%;transform:rotate(-45deg)}
+/* V11 one-artwork renderer: the canvas holds deformed ORIGINAL pixels.
+   Image visible at rest; only moving uses the canvas. Never use substitute SVG bodies. */
+.cn-pet{width:64px;height:64px;filter:drop-shadow(0 2px 2px rgba(62,44,33,.1))}
+.cn-pet-art{position:relative;display:block;width:100%;height:100%;transform-origin:50% 85%}
+.cn-pet-img{display:block;width:100%;height:100%;object-fit:contain}
+.cn-walk-canvas{display:none;position:absolute;inset:0;width:100%;height:100%;pointer-events:none;image-rendering:auto}
+.cn-pet[data-motion="move"].cn-gait-ready .cn-walk-canvas{display:block}
+.cn-pet[data-motion="move"].cn-gait-ready .cn-pet-img{display:none}
+.cn-pet[data-motion="move"] .cn-pet-art{animation:none!important;transform:none!important}
+/* Never show motion debug pathways. Botanical details remain understated. */
+.cn-trail-lines{opacity:.05!important;stroke-dasharray:1 18!important;stroke-width:.8!important}
+.cn-trail-nodes{opacity:.04!important}
+.cn-habitat{opacity:.25!important}
+.cn-pet.cn-underpass{opacity:0!important;pointer-events:none!important}
+.cn-pet[data-bubble="below"] .cn-pet-speech{bottom:auto;top:96%}
+@media(max-width:750px){.cn-pet{width:52px;height:52px}}
+@media(prefers-reduced-motion:reduce){.cn-pet,.cn-pet-art,.cn-walk-canvas{animation:none!important;transition:none!important}}
 
-/* V5 illustration-fidelity fix. Keep the same original character art all the time. */
-.cn-pet-rig{display:none!important}
-.cn-pet-img,
-.cn-pet[data-motion="move"] .cn-pet-img,
-.cn-pet[data-motion="hang"] .cn-pet-img{opacity:1!important;visibility:visible!important}
-.cn-pet{width:64px;height:64px;filter:drop-shadow(0 2px 2px rgba(62,44,33,.10))}
-.cn-pet-art{transform-origin:center 84%}
-/* Running and walking use restrained physical shifts instead of replacing art. */
-.cn-pet[data-motion="move"] .cn-pet-art{animation:cn-art-step .43s cubic-bezier(.37,.1,.6,.93) infinite alternate!important}
-.cn-pet[data-motion="move"][data-gait="dash"] .cn-pet-art,
-.cn-pet[data-motion="move"][data-gait="trot"] .cn-pet-art{animation:cn-art-sprint .27s ease-in-out infinite alternate!important}
-.cn-pet[data-motion="move"][data-gait="sneak"] .cn-pet-art,
-.cn-pet[data-motion="move"][data-gait="tiptoe"] .cn-pet-art{animation:cn-art-creep .65s ease-in-out infinite alternate!important}
-.cn-pet[data-motion="move"][data-travel="up"] .cn-pet-art,
-.cn-pet[data-motion="move"][data-travel="down"] .cn-pet-art{animation:cn-art-vertical .45s ease-in-out infinite alternate!important}
-@keyframes cn-art-step{
-  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-1.4deg) scaleY(.985)}
-  to{transform:scaleX(var(--facing,1)) translateY(-3px) rotate(1.4deg) scaleY(1.012)}
+
+/* V23: nearby-button resting interactions only. */
+/* V14 · discreet live presentation controls (off during ordinary visits). */
+.cn-showcase[hidden]{display:none!important}
+.cn-showcase{position:fixed;right:12px;bottom:max(12px,env(safe-area-inset-bottom));width:min(264px,calc(100vw - 24px));z-index:1001;background:rgba(251,248,241,.98);border:1px solid #d8cdbd;border-radius:15px;padding:12px;box-shadow:0 9px 38px rgba(65,51,39,.15);color:#514536;font:500 12px/1.4 ui-sans-serif,system-ui,sans-serif;backdrop-filter:blur(10px)}
+.cn-showcase *{box-sizing:border-box}
+.cn-showcase-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.cn-showcase-top strong{font-size:12px;letter-spacing:.02em}
+.cn-showcase-top button{width:26px;height:26px;background:transparent;color:#75695b;border:0;border-radius:50%;font-size:21px;line-height:1;cursor:pointer}
+.cn-showcase-label{display:block;color:#8b7d6c;font-size:10px;margin:0 0 4px}
+.cn-showcase select{width:100%;height:33px;border:1px solid #d7ccbc;border-radius:8px;background:#fffdf8;color:#544639;padding:4px 7px;font:inherit}
+.cn-showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.cn-showcase-grid button{border:1px solid #d6cbbb;background:#fdfbf6;color:#554737;min-height:34px;border-radius:8px;padding:6px 4px;font:inherit;font-size:11px;cursor:pointer;white-space:nowrap}
+.cn-showcase-grid button:active{background:#e8ddcf;transform:translateY(1px)}
+.cn-showcase-grid button:focus-visible,.cn-showcase select:focus-visible,.cn-showcase-top button:focus-visible{outline:2px solid #93785c;outline-offset:2px}
+.cn-showcase-status{margin:8px 0 0;color:#867969;min-height:15px;font-size:10px}
+@media(max-width:420px){.cn-showcase{width:min(244px,calc(100vw - 18px));right:9px;padding:10px}.cn-showcase-grid{gap:5px}.cn-showcase-grid button{font-size:10px}}
+
+/* V15: the display box matches the collision footprint exactly. This
+   restores genuine vertical routes at 320–385px without squeezing text. */
+@media (max-width:385px){
+  .cn-pet{width:48px;height:48px}
 }
-@keyframes cn-art-sprint{
-  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-2.2deg) scale(1.012,.98)}
-  to{transform:scaleX(var(--facing,1)) translateY(-5px) rotate(2.2deg) scale(.988,1.022)}
+
+
+/* V17 / Finished product photo story — neutral, editorial, unobtrusive. */
+.cn-actual-product-gallery{margin-top:23px;border:1px solid rgba(114,98,79,.17);border-radius:7px;background:#f6f2eb;overflow:hidden;color:#4f473e}
+.cn-actual-photo-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 14px 10px;font:700 9px/1.3 ui-sans-serif,system-ui,sans-serif;letter-spacing:.13em;color:#817362}
+.cn-actual-photo-stage{position:relative;margin:0 12px;background:#e8e5df;overflow:hidden;border-radius:4px}
+.cn-actual-photo-stage>img{display:block;width:100%;aspect-ratio:4/5.2;height:auto;object-fit:cover;object-position:center 40%;filter:none!important;transition:opacity .15s ease;background:#e9e8e4}
+.cn-actual-photo-caption{position:static;max-width:none;padding:9px 10px;background:#f8f6f1;color:#6c6155;font:500 10px/1.5 ui-sans-serif,system-ui,sans-serif}
+.cn-actual-photo-thumbnails{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:10px 12px 8px}
+.cn-actual-photo-thumb{aspect-ratio:1;background:#f8f6f2;border:2px solid transparent;border-radius:4px;overflow:hidden;min-width:0;padding:0;cursor:pointer;transition:border-color .16s ease,transform .16s ease}
+.cn-actual-photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.cn-actual-photo-thumb[aria-pressed="true"]{border-color:#8d7964}
+.cn-actual-photo-thumb:focus-visible{outline:2px solid #6d5945;outline-offset:2px}
+.cn-actual-photo-thumb:hover{transform:translateY(-2px)}
+.cn-actual-photo-note{font:400 10px/1.6 ui-sans-serif,system-ui,sans-serif;color:#796f63;margin:0;padding:0 13px 14px}
+@media(max-width:750px){.cn-actual-product-gallery{margin-top:18px}.cn-actual-photo-top{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.cn-actual-photo-thumb,.cn-actual-photo-stage>img{transition:none!important}}
+
+/* V18 QA: clear transparent cutouts centered in the actual product gallery. */
+.cn-actual-photo-stage{background:#f1ece4!important}
+.cn-actual-photo-stage>img{object-fit:contain!important;object-position:center!important;background:transparent!important}
+.cn-actual-photo-thumb{background:#f1ece4!important}
+.cn-actual-photo-thumb img{object-fit:contain!important;background:transparent!important}
+
+.cn-dust-puff{
+  position:absolute;z-index:1;pointer-events:none;width:16px;height:12px;
+  margin-left:-8px;margin-top:-6px;opacity:0;border-radius:50%;
+  background:radial-gradient(circle at 30% 58%,rgba(191,178,156,.49) 0 31%,transparent 43%),
+             radial-gradient(circle at 70% 36%,rgba(210,197,174,.43) 0 25%,transparent 40%),
+             radial-gradient(circle at 49% 70%,rgba(180,166,144,.26) 0 30%,transparent 54%);
+  animation:cn-foot-dust .70s ease-out both;
 }
-@keyframes cn-art-creep{
-  from{transform:scaleX(var(--facing,1)) translateY(0px) rotate(-.7deg)}
-  to{transform:scaleX(var(--facing,1)) translateY(-1.5px) rotate(.7deg)}
+.cn-dust-puff[data-animal="panda"]{opacity:.50}
+.cn-dust-puff[data-animal="duck"]{filter:sepia(.1)}
+@keyframes cn-foot-dust{
+  0%{opacity:0;transform:translate(0,0) scale(.45)}
+  15%{opacity:.55;transform:translate(0,-1px) scale(var(--dust-scale,1))}
+  100%{opacity:0;transform:translate(var(--dust-x,-12px),var(--dust-y,-8px)) scale(1.45)}
 }
-@keyframes cn-art-vertical{
-  from{transform:scaleX(var(--facing,1)) translateY(1px) rotate(-1deg)}
-  to{transform:scaleX(var(--facing,1)) translateY(-2.5px) rotate(1deg)}
+@media(prefers-reduced-motion:reduce){.cn-dust-puff{display:none!important;animation:none!important}}
+
+
+/* V23: nearby-button gestures. No hands, hanging arms or edge hooks. */
+.cn-pet[data-perch="near"],.cn-pet[data-perch="rest"]{pointer-events:none}
+.cn-pet[data-perch="rest"] .cn-pet-art{animation:cn-v23-rest 4.4s ease-in-out infinite!important}
+.cn-pet[data-perch="near"][data-motion="sit"] .cn-pet-art{animation:cn-v23-sit 2.6s ease-in-out infinite!important}
+.cn-pet.cn-perch-alert .cn-pet-art{animation:cn-v23-startle .55s ease-in-out 1!important}
+@keyframes cn-v23-rest{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(1px) scale(.985,1.008)}}
+@keyframes cn-v23-sit{0%,100%{transform:translateY(0)}45%{transform:translateY(-1.6px) rotate(-2deg)}}
+@keyframes cn-v23-startle{0%,100%{transform:translateY(0) rotate(0)}40%{transform:translateY(-5px) rotate(-5deg)}75%{transform:translateY(-2px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.cn-pet[data-perch="rest"] .cn-pet-art,.cn-pet[data-perch="near"] .cn-pet-art{animation:none!important}}
+
+/* V24: real sleep posture from each original illustration, not the angry standing pose. */
+.cn-pet[data-motion="sleep"] .cn-pet-art{
+  animation:cn-v24-breath 3.5s ease-in-out infinite!important;
+  transform-origin:50% 77%;filter:saturate(.94)
 }
-/* Paths still work for movement and collision, but do not look like debug guides. */
-.cn-trail-lines{opacity:.105!important;stroke-dasharray:2 16!important;stroke-width:1!important}
-.cn-trail-nodes{opacity:.08!important}
-.cn-environment .cn-trail:after{opacity:.16!important}
-@media(max-width:650px){.cn-pet{width:52px;height:52px}}
-@media(prefers-reduced-motion:reduce){.cn-pet[data-motion="move"] .cn-pet-art{animation:none!important}}
+.cn-pet[data-motion="sleep"] .cn-pet-zz{
+  display:block;right:-1px;top:0px;z-index:3;
+  font:italic 13px/1 Georgia,serif;color:#8e806c;
+  animation:cn-v24-zzz 2.8s ease-out infinite
+}
+@keyframes cn-v24-breath{
+  0%,100%{transform:scaleX(var(--facing,1)) translateY(2px) scale(1,.985)}
+  50%{transform:scaleX(var(--facing,1)) translateY(1px) scale(1.025,1.005)}
+}
+@keyframes cn-v24-zzz{
+  0%{opacity:0;transform:translateY(4px) scale(.72)}
+  35%{opacity:.76;transform:translateY(-2px) scale(1)}
+  100%{opacity:0;transform:translate(3px,-12px) scale(1.04)}
+}
+/* Duck's little stomps and indignant wiggle are distinct from a run. */
+.cn-pet[data-animal="duck"][data-motion="bum"] .cn-pet-art{animation:cn-v24-butt .22s ease-in-out 5 alternate!important}
+.cn-pet[data-animal="duck"][data-motion="sulk"] .cn-pet-art{animation:cn-v24-sulk 1.7s ease-in-out 1 both!important}
+.cn-pet[data-animal="duck"][data-motion="waddle"] .cn-pet-art{animation:cn-v24-waddle .28s ease-in-out 4 alternate!important}
+@keyframes cn-v24-butt{from{transform:scaleX(var(--facing,1)) rotate(-9deg) translateX(-3px)}to{transform:scaleX(var(--facing,1)) rotate(9deg) translateX(3px)}}
+@keyframes cn-v24-sulk{0%,100%{transform:scaleX(var(--facing,1)) translateY(0) rotate(0)}40%,80%{transform:scaleX(var(--facing,1)) translateY(5px) scale(1.06,.9) rotate(-7deg)}}
+@keyframes cn-v24-waddle{from{transform:scaleX(var(--facing,1)) rotate(-9deg) translateY(1px)}to{transform:scaleX(var(--facing,1)) rotate(9deg) translateY(-2px)}}
+/* The illustration is the same; canvas drawing now supplies separate gait mechanics. */
+.cn-pet[data-motion="move"][data-gait="dash"]{filter:drop-shadow(0 4px 2px rgba(62,44,33,.15))}
+@media(prefers-reduced-motion:reduce){.cn-pet[data-motion="sleep"] .cn-pet-art,.cn-pet[data-motion="sleep"] .cn-pet-zz{animation:none!important}}
